@@ -1,0 +1,364 @@
+{
+  "properties": {
+    "workflow_details": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "title": "Workflow Name",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Workflow Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object",
+      "description": "Add information that will help to differentiate this workflow from another.",
+      "title": "Set Workflow Details"
+    },
+    "gee_project_name": {
+      "additionalProperties": false,
+      "properties": {
+        "data_source": {
+          "$ref": "#/$defs/GoogleEarthEngineConnection",
+          "title": "",
+          "description": "Select one of your configured data sources."
+        }
+      },
+      "required": [
+        "data_source"
+      ],
+      "type": "object",
+      "title": "Connect to Earth Engine"
+    },
+    "groupers": {
+      "additionalProperties": false,
+      "properties": {
+        "groupers": {
+          "default": [
+            {
+              "index_name": "name"
+            }
+          ],
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ValueGrouper"
+              }
+            ],
+            "title": "Group by"
+          },
+          "title": " ",
+          "type": "array",
+          "description": "            Specify how the data should be grouped to create the views for your dashboard.\n            This field is optional; if left blank, all the data will appear in a single view.\n            "
+        }
+      },
+      "type": "object",
+      "required": [],
+      "title": "Set Groupers"
+    },
+    "roi": {
+      "additionalProperties": false,
+      "properties": {
+        "config": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/LocalFileSpatialFeatures"
+            },
+            {
+              "$ref": "#/$defs/RemoteFileSpatialFeatures"
+            }
+          ],
+          "title": "Spatial Feature Data Source"
+        }
+      },
+      "required": [
+        "config"
+      ],
+      "type": "object",
+      "title": "Load Region of Interest"
+    },
+    "forest_cover_trends": {
+      "additionalProperties": false,
+      "properties": {
+        "tree_cover_threshold": {
+          "default": 60.0,
+          "title": "Tree Cover Threshold",
+          "type": "number",
+          "description": "Minimum tree cover percentage (0-100)"
+        },
+        "scale": {
+          "default": 30,
+          "title": "Scale",
+          "type": "integer",
+          "description": "Pixel scale in meters for reduction"
+        },
+        "max_pixels": {
+          "default": 1000000000.0,
+          "title": "Max Pixels",
+          "type": "number",
+          "description": "Maximum pixels for reduction"
+        }
+      },
+      "required": [],
+      "type": "object",
+      "title": "Extract Forest Cover Trends"
+    },
+    "gamm_model": {
+      "additionalProperties": false,
+      "properties": {
+        "metric": {
+          "default": "AIC",
+          "enum": [
+            "AIC",
+            "BIC",
+            "Euclidean",
+            "MSE",
+            "R-Squared"
+          ],
+          "title": "Metric",
+          "type": "string",
+          "description": "Metric for optimization"
+        },
+        "degree_of_freedom": {
+          "default": 20,
+          "title": "Degree Of Freedom",
+          "type": "integer",
+          "description": "Degrees of freedom for spline basis"
+        },
+        "degree": {
+          "default": 3,
+          "title": "Degree",
+          "type": "integer",
+          "description": "Degree of B-spline basis"
+        },
+        "family": {
+          "default": "Gaussian",
+          "enum": [
+            "Gaussian",
+            "Poisson",
+            "Binomial"
+          ],
+          "title": "Family",
+          "type": "string",
+          "description": "Distribution family for GLM"
+        }
+      },
+      "required": [],
+      "type": "object",
+      "title": "Fit GAMM Model"
+    }
+  },
+  "$defs": {
+    "GoogleEarthEngineConnection": {
+      "properties": {
+        "name": {
+          "title": "Data Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "GoogleEarthEngineConnection",
+      "type": "object"
+    },
+    "SpatialGrouper": {
+      "properties": {
+        "spatial_index_name": {
+          "title": "Spatial Regions",
+          "type": "string"
+        }
+      },
+      "required": [
+        "spatial_index_name"
+      ],
+      "title": "Spatial",
+      "type": "object"
+    },
+    "TemporalGrouper": {
+      "properties": {
+        "temporal_index": {
+          "oneOf": [
+            {
+              "const": "%Y",
+              "title": "Year (example: 2024)"
+            },
+            {
+              "const": "%B",
+              "title": "Month (example: September)"
+            },
+            {
+              "const": "%Y-%m",
+              "title": "Year and Month (example: 2023-01)"
+            },
+            {
+              "const": "%j",
+              "title": "Day of the year as a number (example: 365)"
+            },
+            {
+              "const": "%d",
+              "title": "Day of the month as a number (example: 31)"
+            },
+            {
+              "const": "%A",
+              "title": "Day of the week (example: Sunday)"
+            },
+            {
+              "const": "%H",
+              "title": "Hour (24-hour clock) as number (example: 22)"
+            },
+            {
+              "const": "%Y-%m-%d",
+              "title": "Date (example: 2025-01-31)"
+            }
+          ],
+          "title": "Time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "temporal_index"
+      ],
+      "title": "Time",
+      "type": "object"
+    },
+    "ValueGrouper": {
+      "properties": {
+        "index_name": {
+          "oneOf": [
+            {
+              "const": "name",
+              "title": "Region of Interest"
+            }
+          ],
+          "title": "Category",
+          "type": "string"
+        }
+      },
+      "required": [
+        "index_name"
+      ],
+      "title": "Category",
+      "type": "object"
+    },
+    "EarthRangerSpatialFeatures": {
+      "properties": {
+        "data_source": {
+          "description": "Select one of your configured EarthRanger data sources.",
+          "title": "Data Source",
+          "type": "string"
+        },
+        "spatial_features_group_name": {
+          "description": "Name of the spatial features group in EarthRanger",
+          "title": "Spatial Features Group Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "data_source",
+        "spatial_features_group_name"
+      ],
+      "title": "EarthRanger",
+      "type": "object"
+    },
+    "LocalFileSpatialFeatures": {
+      "properties": {
+        "file_path": {
+          "description": "Path to geoparquet (.parquet) or geopackage (.gpkg) file",
+          "title": "File Path",
+          "type": "string",
+          "default": ""
+        },
+        "name_column": {
+          "description": "Column to use as region name",
+          "title": "Name Column",
+          "type": "string"
+        },
+        "layer": {
+          "default": null,
+          "description": "Layer name (only applicable to geopackage files)",
+          "ecoscope:advanced": true,
+          "title": "Layer",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "file_path",
+        "name_column"
+      ],
+      "title": "Local File",
+      "type": "object"
+    },
+    "RemoteFileSpatialFeatures": {
+      "properties": {
+        "url": {
+          "description": "URL to geoparquet (.parquet) or geopackage (.gpkg) file",
+          "title": "Url",
+          "type": "string",
+          "default": ""
+        },
+        "name_column": {
+          "description": "Column to use as region name",
+          "title": "Name Column",
+          "type": "string"
+        },
+        "layer": {
+          "default": null,
+          "description": "Layer name (only applicable for geopackage files)",
+          "ecoscope:advanced": true,
+          "title": "Layer",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "url",
+        "name_column"
+      ],
+      "title": "Remote URL",
+      "type": "object"
+    }
+  },
+  "uiSchema": {
+    "workflow_details": {
+      "ui:order": [
+        "name",
+        "description"
+      ]
+    },
+    "forest_cover_trends": {
+      "ui:order": [
+        "tree_cover_threshold",
+        "scale",
+        "max_pixels"
+      ]
+    },
+    "gamm_model": {
+      "ui:order": [
+        "metric",
+        "degree_of_freedom",
+        "degree",
+        "family"
+      ]
+    },
+    "ui:order": [
+      "workflow_details",
+      "gee_project_name",
+      "groupers",
+      "roi",
+      "forest_cover_trends",
+      "gamm_model"
+    ]
+  },
+  "additionalProperties": false
+}

@@ -73,7 +73,7 @@
       "additionalProperties": false,
       "properties": {
         "var": {
-          "title": "",
+          "title": "Image",
           "type": "string",
           "default": "UMD/hansen/global_forest_change_2024_v1_12",
           "description": "Hansen Global Forest Change dataset image name."
@@ -450,7 +450,7 @@
           "additionalProperties": false,
           "properties": {
             "title": {
-              "title": "",
+              "title": "Map Title",
               "type": "string",
               "default": "Forest Change Map",
               "description": "Title displayed on the forest change map."
@@ -466,7 +466,7 @@
           "additionalProperties": false,
           "properties": {
             "title": {
-              "title": "",
+              "title": "Trend Chart Title",
               "type": "string",
               "default": "Forest Cover Trend Chart",
               "description": "Title displayed on the forest cover trend chart."

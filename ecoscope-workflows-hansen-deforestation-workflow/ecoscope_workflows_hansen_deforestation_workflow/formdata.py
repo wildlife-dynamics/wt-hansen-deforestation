@@ -23,7 +23,9 @@ class HansenImage(BaseModel):
         extra="forbid",
     )
     var: str = Field(
-        ..., description="Hansen Global Forest Change dataset image name.", title=""
+        ...,
+        description="Hansen Global Forest Change dataset image name.",
+        title="Image",
     )
 
 
@@ -264,7 +266,7 @@ class MapWidgetTitle(BaseModel):
         extra="forbid",
     )
     title: str = Field(
-        ..., description="Title displayed on the forest change map.", title=""
+        ..., description="Title displayed on the forest change map.", title="Map Title"
     )
 
 
@@ -273,7 +275,9 @@ class ChartWidgetTitle(BaseModel):
         extra="forbid",
     )
     title: str = Field(
-        ..., description="Title displayed on the forest cover trend chart.", title=""
+        ...,
+        description="Title displayed on the forest cover trend chart.",
+        title="Trend Chart Title",
     )
 
 

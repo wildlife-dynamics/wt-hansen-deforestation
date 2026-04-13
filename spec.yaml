@@ -39,14 +39,17 @@ rjsf-overrides:
         { "$ref": "#/$defs/RemoteFileSpatialFeatures" },
       ]
 
+    hansen_image.properties.var.title: "Image"
     hansen_image.properties.var.default: "UMD/hansen/global_forest_change_2024_v1_12"
     hansen_image.properties.var.description: "Hansen Global Forest Change dataset image name."
 
     Forest Analysis.properties.tree_cover_threshold.properties.threshold.default: 60.0
 
+    Dashboard.properties.map_widget_title.properties.title.title: "Map Title"
     Dashboard.properties.map_widget_title.properties.title.default: "Forest Change Map"
     Dashboard.properties.map_widget_title.properties.title.description: "Title displayed on the forest change map."
 
+    Dashboard.properties.chart_widget_title.properties.title.title: "Trend Chart Title"
     Dashboard.properties.chart_widget_title.properties.title.default: "Forest Cover Trend Chart"
     Dashboard.properties.chart_widget_title.properties.title.description: "Title displayed on the forest cover trend chart."
 

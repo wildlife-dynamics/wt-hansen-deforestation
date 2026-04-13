@@ -5,8 +5,8 @@
 
 ```yaml
 # fingerprint:
-artifacts_sha256_basic: 7752e9d0cbb0b31c6f49fd8cca62ae0c153e0d05e8b9f01a0317890599dd0810
-artifacts_sha256_strict: db1315216186e81a12e31f50afae13662b42ef13eb1aed3d0b8124555f480158
+artifacts_sha256_basic: 30f38ce4fa38d64c9797ce8a077527fad7bf5ee3f268e160e2ce280a69637e26
+artifacts_sha256_strict: 9c00c6d395939dc50dd87b7f1b10d2260b2ce275f194b72c80a019f4695793d1
 installed_requirements:
 - channel: https://repo.prefix.dev/ecoscope-workflows/
   name: ecoscope-workflows-core
@@ -21,7 +21,7 @@ installed_requirements:
   name: ecoscope-workflows-ext-gamm-trend-analysis
   version: {version: ==0.0.1}
 params_sha256: 85f590b4f4ae55806e454c1130c08ba6a2a16d98cf25b2d23e9a37551141f903
-spec_sha256: 0227e944e727d84afe83f23cfcbb6180672dc0e6f64c4109eed47f58442b67c9
+spec_sha256: ce40744de361661a6f1bc4bcc2d3c0decc065906822ee4dd859b2557ff47a079
 
 ```
 

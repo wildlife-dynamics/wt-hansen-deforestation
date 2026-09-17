@@ -425,10 +425,6 @@
                 "spline_settings": {
                   "degree": 3,
                   "degree_of_freedom": 6
-                },
-                "bounds_settings": {
-                  "lower_bound": null,
-                  "upper_bound": null
                 }
               },
               "title": "Model"
@@ -698,26 +694,6 @@
       "title": "AddInterceptSettings",
       "type": "object"
     },
-    "GamBoundsSettings": {
-      "properties": {
-        "lower_bound": {
-          "default": null,
-          "description": "Lower bound for spline knot placement. Leave empty to infer from the data range.",
-          "ecoscope:advanced": true,
-          "title": "Lower Knot Bound",
-          "type": "number"
-        },
-        "upper_bound": {
-          "default": null,
-          "description": "Upper bound for spline knot placement. Leave empty to infer from the data range.",
-          "ecoscope:advanced": true,
-          "title": "Upper Knot Bound",
-          "type": "number"
-        }
-      },
-      "title": "GamBoundsSettings",
-      "type": "object"
-    },
     "GamFamilySettings": {
       "properties": {
         "family": {
@@ -752,7 +728,10 @@
           "description": "Fixed smoothing strength. Leave empty to select automatically via cross-validation.",
           "ecoscope:advanced": true,
           "title": "Smoothing Parameter (Alpha)",
-          "type": "number"
+          "type": [
+            "number",
+            "null"
+          ]
         },
         "metric": {
           "default": "aic",
@@ -791,7 +770,7 @@
       "properties": {
         "degree_of_freedom": {
           "default": 6,
-          "description": "Number of basis functions for the spline. Higher values allow more flexible curves but risk overfitting - and if this meets or exceeds the number of data points, the fit perfectly interpolates every point (no residual degrees of freedom left), so no confidence interval can be computed at all (NaN, no band shown). Keep this comfortably below your expected number of time points.",
+          "description": "Number of basis functions for the spline. Higher values allow more flexible curves but risk overfitting.",
           "ecoscope:advanced": true,
           "title": "Spline Degrees of Freedom",
           "type": "integer"
@@ -856,19 +835,6 @@
           },
           "ecoscope:advanced": true,
           "title": "Spline Shape"
-        },
-        "bounds_settings": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/GamBoundsSettings"
-            }
-          ],
-          "default": {
-            "lower_bound": null,
-            "upper_bound": null
-          },
-          "ecoscope:advanced": true,
-          "title": "Knot Bounds"
         }
       },
       "title": "Generalized Additive Model (GAM)",
@@ -936,7 +902,10 @@
           "description": "Number of MCMC tuning steps. Leave empty to default to the same value as Posterior Draws.",
           "ecoscope:advanced": true,
           "title": "MCMC Tuning Steps",
-          "type": "integer"
+          "type": [
+            "integer",
+            "null"
+          ]
         },
         "chains": {
           "default": 2,
@@ -950,7 +919,10 @@
           "description": "Seed for the MCMC sampler. Leave empty for a non-deterministic fit.",
           "ecoscope:advanced": true,
           "title": "Random Seed",
-          "type": "integer"
+          "type": [
+            "integer",
+            "null"
+          ]
         }
       },
       "title": "GammMcmcSettings",

@@ -1503,8 +1503,8 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-64/pyobjc-framework-cocoa-12.2.2-py312ha4ebf3d_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/pyogrio-0.10.0-py312h4bcfd6b_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/pyproj-3.7.2-py312h4270620_3.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/pytensor-3.3.1-py312h22996e3_0.conda
-      - conda: https://conda.anaconda.org/conda-forge/osx-64/pytensor-base-3.3.1-np2py312h9d651bb_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/pytensor-3.3.2-py312hb2c3a3e_0.conda
+      - conda: https://conda.anaconda.org/conda-forge/osx-64/pytensor-base-3.3.2-np2py312h9d651bb_0.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/python-3.12.14-h6907cb8_3_cpython.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/python-duckdb-1.5.5-py312hd01dda1_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-64/python-igraph-1.0.0-py312h69bf00f_0.conda
@@ -21033,23 +21033,23 @@ packages:
   run_exports: {}
   size: 518646
   timestamp: 1772623275068
-- conda: https://conda.anaconda.org/conda-forge/osx-64/pytensor-3.3.1-py312h22996e3_0.conda
-  sha256: 7f2fb54faac480b72bc4479415e4a20c27e3e18b3a7a2bfdf8e61eda9a752b8b
-  md5: bfe784d46634919e7f609d76ce3864cc
+- conda: https://conda.anaconda.org/conda-forge/osx-64/pytensor-3.3.2-py312hb2c3a3e_0.conda
+  sha256: 782624a32253e6a9c5b3d027a6e854a141fd0243f6eefb7f77b6536c9d3967b4
+  md5: 48166863272c7a67011beda37c94c648
   depends:
   - python
-  - pytensor-base ==3.3.1 np2py312h9d651bb_0
+  - pytensor-base ==3.3.2 np2py312h9d651bb_0
   - clangxx
   - blas * mkl
   - mkl-service
   - python_abi 3.12.* *_cp312
   license: BSD-3-Clause
   run_exports: {}
-  size: 9534
-  timestamp: 1789651511194
-- conda: https://conda.anaconda.org/conda-forge/osx-64/pytensor-base-3.3.1-np2py312h9d651bb_0.conda
-  sha256: 76c1d679f653b8257578e922c450d13156364bad739d418f78a024bdd9f22632
-  md5: 29fa27064b45c035962e83b264c914e9
+  size: 9522
+  timestamp: 1789653165881
+- conda: https://conda.anaconda.org/conda-forge/osx-64/pytensor-base-3.3.2-np2py312h9d651bb_0.conda
+  sha256: 8234fc7ad73dfe8404e6cfd378a6167d05c6fcf6ebad41931485358eb832a7f6
+  md5: 9b500e30495d72e65bc322663870cecf
   depends:
   - python
   - setuptools >=59.0.0
@@ -21059,12 +21059,12 @@ packages:
   - filelock >=3.15
   - libcxx >=21
   - __osx >=11.0
-  - numpy >=1.25,<3
   - python_abi 3.12.* *_cp312
+  - numpy >=1.25,<3
   license: BSD-3-Clause
   run_exports: {}
-  size: 3130632
-  timestamp: 1789651511194
+  size: 3137865
+  timestamp: 1789653165881
 - conda: https://conda.anaconda.org/conda-forge/osx-64/python-3.12.14-h6907cb8_3_cpython.conda
   build_number: 3
   sha256: 63105f50a2dad83b0ee71cfd762f7c8325043dbac975c46ae19ecb1b0e64dc21

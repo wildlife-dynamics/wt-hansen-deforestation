@@ -29,29 +29,6 @@ requirements:
     version: "0.9.2"
     channel: conda-forge
 
-  # Without these, conda resolves an old arviz/arviz-plots pair (0.23.4/0.8.0
-  # as observed) that's incompatible with the matplotlib version also
-  # resolved here (arviz_plots.__init__ calls the private
-  # matplotlib.style.core API, removed in newer matplotlib) - breaks GAMM
-  # (any of the 4 trend models) on `import bambi` with
-  # AttributeError: module 'matplotlib.style' has no attribute 'core'.
-  # Pinning arviz alone then breaks the old bambi/pymc conda resolves too
-  # (they still call arviz.concat, removed in arviz>=1.0) - so bambi/pymc
-  # need bumping in step with arviz. Versions here match a verified-working
-  # combo (ecoscope's own dev environment, via pip).
-  - name: arviz
-    version: ">=1.0.0"
-    channel: conda-forge
-  - name: arviz-plots
-    version: ">=1.0.0"
-    channel: conda-forge
-  - name: bambi
-    version: ">=0.20.0"
-    channel: conda-forge
-  - name: pymc
-    version: ">=6.0.0"
-    channel: conda-forge
-
 rjsf-overrides:
   $defs:
     ValueGrouper.properties.index_name.oneOf:

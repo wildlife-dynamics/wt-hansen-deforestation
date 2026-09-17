@@ -48,13 +48,3 @@ low-scale outliers - observed once as a region's GAMM-predicted trend
 briefly dipping below zero (not physically possible for a cumulative loss
 percentage), something the independent per-region fits don't do since each
 is calibrated to its own scale.
-
-## Environment notes
-
-conda resolves an old `arviz`/`arviz-plots` pair (`0.23.4`/`0.8.0` observed)
-incompatible with the `matplotlib` version also resolved - breaks any of the
-4 trend models on `import bambi` with `AttributeError: module
-'matplotlib.style' has no attribute 'core'`. Pinning `arviz`/`arviz-plots`
-alone then breaks the old `bambi`/`pymc` conda resolves too (they still call
-`arviz.concat`, removed in `arviz>=1.0`), so all four are pinned together in
-`spec.yaml`'s `requirements` to a verified-working combo.

@@ -64,6 +64,22 @@ rjsf-overrides:
     time_range.properties.until.description: >-
       End year of the analysis. Depends on the Hansen dataset selected
       (e.g. UMD/hansen/global_forest_change_2024_v1_12 covers up to 2024).
+
+    # GAMM by default - its combined-fit random effect gives every region a
+    # more robust estimate than fitting each in isolation (see the module
+    # docstring in ecoscope.platform.tasks.analysis._trend_analysis).
+    Trend Analysis.properties.trend_model.properties.model.default:
+      model: "gamm"
+      family_settings:
+        family: "gaussian"
+      spline_settings:
+        degree_of_freedom: 10
+      mcmc_settings:
+        inference_method: "mcmc"
+        draws: 500
+        tune: null
+        chains: 2
+        random_seed: null
   uiSchema:
     # name_column is fixed to "name" (see the $defs override above) and
     # never a real per-workflow choice - hide it so users just point at a

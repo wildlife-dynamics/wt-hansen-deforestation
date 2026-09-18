@@ -414,17 +414,19 @@
                 }
               ],
               "default": {
-                "model": "gam",
+                "model": "gamm",
                 "family_settings": {
                   "family": "gaussian"
                 },
-                "smoothing_settings": {
-                  "alpha": null,
-                  "metric": "aic"
-                },
                 "spline_settings": {
-                  "degree": 3,
-                  "degree_of_freedom": 6
+                  "degree_of_freedom": 10
+                },
+                "mcmc_settings": {
+                  "inference_method": "mcmc",
+                  "draws": 500,
+                  "tune": null,
+                  "chains": 2,
+                  "random_seed": null
                 }
               },
               "title": "Model"

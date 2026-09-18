@@ -5,23 +5,17 @@
 
 ```yaml
 # fingerprint:
-artifacts_sha256_basic: 30f38ce4fa38d64c9797ce8a077527fad7bf5ee3f268e160e2ce280a69637e26
-artifacts_sha256_strict: 9c00c6d395939dc50dd87b7f1b10d2260b2ce275f194b72c80a019f4695793d1
+artifacts_sha256_basic: 5304cd1b54d0dd1180844a974c87151fc07f988841575704fd2c1b6da63f7436
+artifacts_sha256_strict: 480f6cfa58797a477c8bf6c18314b6c3621e9f580a8e87d3c5081316fb14a6b9
 installed_requirements:
 - channel: https://repo.prefix.dev/ecoscope-workflows/
-  name: ecoscope-workflows-core
-  version: {version: ==0.22.16}
-- channel: https://repo.prefix.dev/ecoscope-workflows/
-  name: ecoscope-workflows-ext-ecoscope
-  version: {version: ==0.22.16}
-- channel: https://repo.prefix.dev/ecoscope-workflows-custom/
-  name: ecoscope-workflows-ext-custom
-  version: {version: ==0.0.41}
-- channel: https://repo.prefix.dev/ecoscope-workflows-custom/
-  name: ecoscope-workflows-ext-gamm-trend-analysis
-  version: {version: ==0.0.1}
-params_sha256: 85f590b4f4ae55806e454c1130c08ba6a2a16d98cf25b2d23e9a37551141f903
-spec_sha256: ce40744de361661a6f1bc4bcc2d3c0decc065906822ee4dd859b2557ff47a079
+  name: ecoscope-platform
+  version: {version: ==2.25.0}
+- channel: conda-forge
+  name: pydeck
+  version: {version: ==0.9.2}
+params_sha256: b4155a0e4908f5d35f26141ab8e3d854b21163cef942d9c1c2a27785a01a2be6
+spec_sha256: b45bc43e016e16552060ce7622f723e10fc31814fae56fe329977fca13c008bb
 
 ```
 

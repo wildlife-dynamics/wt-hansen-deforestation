@@ -73,7 +73,7 @@
       "additionalProperties": false,
       "properties": {
         "var": {
-          "title": "Image",
+          "title": "",
           "type": "string",
           "default": "UMD/hansen/global_forest_change_2024_v1_12",
           "description": "Hansen Global Forest Change dataset image name."
@@ -140,17 +140,19 @@
         "tree_cover_threshold": {
           "additionalProperties": false,
           "properties": {
-            "threshold": {
-              "default": 60.0,
-              "maximum": 100.0,
-              "minimum": 0.0,
-              "title": "Threshold",
+            "var": {
+              "title": "Tree Cover Threshold",
               "type": "number",
-              "description": "Minimum tree cover percentage (0\u2013100) to classify a pixel as forest."
+              "default": 60.0,
+              "description": "Minimum tree cover percentage (0-100) to classify a pixel as forest.",
+              "minimum": 0.0,
+              "maximum": 100.0
             }
           },
+          "required": [
+            "var"
+          ],
           "type": "object",
-          "required": [],
           "title": ""
         },
         "forest_cover_trends": {
@@ -185,12 +187,14 @@
             {
               "url": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
               "opacity": 1,
-              "max_zoom": 20
+              "max_zoom": 20,
+              "min_zoom": 0
             },
             {
               "url": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
               "opacity": 0.5,
-              "max_zoom": 20
+              "max_zoom": 20,
+              "min_zoom": 0
             }
           ],
           "items": {
@@ -211,6 +215,7 @@
                   "opacity": {
                     "default": 1,
                     "description": "Set layer transparency from 1 (fully visible) to 0 (hidden).",
+                    "ecoscope:advanced": true,
                     "maximum": 1.0,
                     "minimum": 0.0,
                     "title": "Layer Opacity",
@@ -235,6 +240,7 @@
                   "opacity": {
                     "default": 1,
                     "description": "Set layer transparency from 1 (fully visible) to 0 (hidden).",
+                    "ecoscope:advanced": true,
                     "maximum": 1.0,
                     "minimum": 0.0,
                     "title": "Layer Opacity",
@@ -259,6 +265,7 @@
                   "opacity": {
                     "default": 1,
                     "description": "Set layer transparency from 1 (fully visible) to 0 (hidden).",
+                    "ecoscope:advanced": true,
                     "maximum": 1.0,
                     "minimum": 0.0,
                     "title": "Layer Opacity",
@@ -283,6 +290,7 @@
                   "opacity": {
                     "default": 1,
                     "description": "Set layer transparency from 1 (fully visible) to 0 (hidden).",
+                    "ecoscope:advanced": true,
                     "maximum": 1.0,
                     "minimum": 0.0,
                     "title": "Layer Opacity",
@@ -290,30 +298,6 @@
                   }
                 },
                 "title": "Terrain",
-                "type": "object"
-              },
-              {
-                "description": "A tiled raster layer loaded on-demand from a URL template (e.g., base maps).",
-                "properties": {
-                  "url": {
-                    "default": "https://tiles.arcgis.com/tiles/POUcpLYXNckpLjnY/arcgis/rest/services/landDx_basemap_tiles_mapservice/MapServer/tile/{z}/{y}/{x}",
-                    "title": "Preset Layer URL",
-                    "type": "string",
-                    "const": "https://tiles.arcgis.com/tiles/POUcpLYXNckpLjnY/arcgis/rest/services/landDx_basemap_tiles_mapservice/MapServer/tile/{z}/{y}/{x}",
-                    "enum": [
-                      "https://tiles.arcgis.com/tiles/POUcpLYXNckpLjnY/arcgis/rest/services/landDx_basemap_tiles_mapservice/MapServer/tile/{z}/{y}/{x}"
-                    ]
-                  },
-                  "opacity": {
-                    "default": 1,
-                    "description": "Set layer transparency from 1 (fully visible) to 0 (hidden).",
-                    "maximum": 1.0,
-                    "minimum": 0.0,
-                    "title": "Layer Opacity",
-                    "type": "number"
-                  }
-                },
-                "title": "LandDx",
                 "type": "object"
               },
               {
@@ -331,6 +315,7 @@
                   "opacity": {
                     "default": 1,
                     "description": "Set layer transparency from 1 (fully visible) to 0 (hidden).",
+                    "ecoscope:advanced": true,
                     "maximum": 1.0,
                     "minimum": 0.0,
                     "title": "Layer Opacity",
@@ -353,6 +338,7 @@
                   "opacity": {
                     "default": 1,
                     "description": "Set layer transparency from 1 (fully visible) to 0 (hidden).",
+                    "ecoscope:advanced": true,
                     "maximum": 1.0,
                     "minimum": 0.0,
                     "title": "Custom Layer Opacity",
@@ -386,57 +372,66 @@
       "required": [],
       "title": "Base Maps"
     },
+    "roi_layer": {
+      "additionalProperties": false,
+      "properties": {
+        "tooltip_columns": {
+          "default": null,
+          "items": {
+            "type": "string"
+          },
+          "title": "Tooltip Columns",
+          "type": "array",
+          "description": "Restrict the on-hover tooltip to these column names. None (default) shows all properties.",
+          "ecoscope:advanced": true
+        }
+      },
+      "type": "object",
+      "required": [],
+      "title": ""
+    },
     "Trend Analysis": {
       "type": "object",
-      "description": "Configure the GAM trend fitting parameters.",
+      "description": "Choose a trend model and configure its fitting parameters.",
       "ecoscope:task_group": true,
       "properties": {
-        "gamm_model": {
+        "trend_model": {
           "additionalProperties": false,
           "properties": {
-            "metric": {
-              "default": "AIC",
-              "enum": [
-                "AIC",
-                "BIC",
-                "Euclidean",
-                "MSE",
-                "R-Squared"
+            "model": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/LinearTrendModel"
+                },
+                {
+                  "$ref": "#/$defs/GlmTrendModel"
+                },
+                {
+                  "$ref": "#/$defs/GamTrendModel"
+                },
+                {
+                  "$ref": "#/$defs/GammTrendModel"
+                }
               ],
-              "title": "Metric",
-              "type": "string",
-              "description": "Metric for optimization",
-              "ecoscope:advanced": true
-            },
-            "degree_of_freedom": {
-              "default": 10,
-              "title": "Degree Of Freedom",
-              "type": "integer",
-              "description": "Degrees of freedom for spline basis",
-              "ecoscope:advanced": true
-            },
-            "degree": {
-              "default": 3,
-              "title": "Degree",
-              "type": "integer",
-              "description": "Degree of B-spline basis",
-              "ecoscope:advanced": true
-            },
-            "family": {
-              "default": "Gaussian",
-              "enum": [
-                "Gaussian",
-                "Poisson",
-                "Binomial"
-              ],
-              "title": "Family",
-              "type": "string",
-              "description": "Distribution family for GLM",
-              "ecoscope:advanced": true
+              "default": {
+                "model": "gam",
+                "family_settings": {
+                  "family": "gaussian"
+                },
+                "smoothing_settings": {
+                  "alpha": null,
+                  "metric": "aic"
+                },
+                "spline_settings": {
+                  "degree": 3,
+                  "degree_of_freedom": 6
+                }
+              },
+              "title": "Model"
             }
           },
-          "required": [],
           "type": "object",
+          "required": [],
           "title": ""
         }
       }
@@ -449,7 +444,7 @@
         "map_widget_title": {
           "additionalProperties": false,
           "properties": {
-            "title": {
+            "var": {
               "title": "Map Title",
               "type": "string",
               "default": "Forest Change Map",
@@ -457,7 +452,7 @@
             }
           },
           "required": [
-            "title"
+            "var"
           ],
           "type": "object",
           "title": ""
@@ -465,7 +460,7 @@
         "chart_widget_title": {
           "additionalProperties": false,
           "properties": {
-            "title": {
+            "var": {
               "title": "Trend Chart Title",
               "type": "string",
               "default": "Forest Cover Trend Chart",
@@ -473,7 +468,7 @@
             }
           },
           "required": [
-            "title"
+            "var"
           ],
           "type": "object",
           "title": ""
@@ -586,14 +581,14 @@
     "ValueGrouper": {
       "properties": {
         "index_name": {
+          "title": "Category",
+          "type": "string",
           "oneOf": [
             {
               "const": "name",
               "title": "Region of Interest"
             }
-          ],
-          "title": "Category",
-          "type": "string"
+          ]
         }
       },
       "required": [
@@ -633,7 +628,8 @@
         "name_column": {
           "description": "Column to use as region name",
           "title": "Name Column",
-          "type": "string"
+          "type": "string",
+          "default": "name"
         },
         "layer": {
           "default": null,
@@ -664,7 +660,8 @@
         "name_column": {
           "description": "Column to use as region name",
           "title": "Name Column",
-          "type": "string"
+          "type": "string",
+          "default": "name"
         },
         "layer": {
           "default": null,
@@ -682,6 +679,421 @@
         "name_column"
       ],
       "title": "Remote URL",
+      "type": "object"
+    },
+    "AddInterceptSettings": {
+      "properties": {
+        "add_intercept": {
+          "default": true,
+          "description": "Whether to fit a y-intercept term. Disable to force the line through the origin.",
+          "ecoscope:advanced": true,
+          "title": "Add Intercept",
+          "type": "boolean"
+        }
+      },
+      "title": "AddInterceptSettings",
+      "type": "object"
+    },
+    "GamFamilySettings": {
+      "properties": {
+        "family": {
+          "default": "gaussian",
+          "description": "Distribution assumed for the response variable.",
+          "ecoscope:advanced": true,
+          "oneOf": [
+            {
+              "const": "gaussian",
+              "title": "Gaussian"
+            },
+            {
+              "const": "poisson",
+              "title": "Poisson"
+            },
+            {
+              "const": "binomial",
+              "title": "Binomial"
+            }
+          ],
+          "title": "Distribution Family",
+          "type": "string"
+        }
+      },
+      "title": "GamFamilySettings",
+      "type": "object"
+    },
+    "GamSmoothingSettings": {
+      "properties": {
+        "alpha": {
+          "default": null,
+          "description": "Fixed smoothing strength. Leave empty to select automatically via cross-validation.",
+          "ecoscope:advanced": true,
+          "title": "Smoothing Parameter (Alpha)",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "metric": {
+          "default": "aic",
+          "description": "Used only when Alpha is left empty.",
+          "ecoscope:advanced": true,
+          "oneOf": [
+            {
+              "const": "aic",
+              "title": "AIC"
+            },
+            {
+              "const": "bic",
+              "title": "BIC"
+            },
+            {
+              "const": "euclidean",
+              "title": "Euclidean Distance"
+            },
+            {
+              "const": "mse",
+              "title": "MSE"
+            },
+            {
+              "const": "r_squared",
+              "title": "R-Squared"
+            }
+          ],
+          "title": "Alpha Selection Metric",
+          "type": "string"
+        }
+      },
+      "title": "GamSmoothingSettings",
+      "type": "object"
+    },
+    "GamSplineSettings": {
+      "properties": {
+        "degree_of_freedom": {
+          "default": 6,
+          "description": "Number of basis functions for the spline. Higher values allow more flexible curves but risk overfitting.",
+          "ecoscope:advanced": true,
+          "title": "Spline Degrees of Freedom",
+          "type": "integer"
+        },
+        "degree": {
+          "default": 3,
+          "description": "Polynomial degree of each spline segment (3 = cubic).",
+          "ecoscope:advanced": true,
+          "title": "Spline Degree",
+          "type": "integer"
+        }
+      },
+      "title": "GamSplineSettings",
+      "type": "object"
+    },
+    "GamTrendModel": {
+      "description": "Generalized additive model via B-splines. Smooths the trend rather\nthan fitting a straight line; the recommended default for most trend\ncharts.",
+      "properties": {
+        "model": {
+          "const": "gam",
+          "default": "gam",
+          "enum": [
+            "gam"
+          ],
+          "title": "Model",
+          "type": "string"
+        },
+        "family_settings": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/GamFamilySettings"
+            }
+          ],
+          "default": {
+            "family": "gaussian"
+          },
+          "ecoscope:advanced": true,
+          "title": "Distribution Family"
+        },
+        "smoothing_settings": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/GamSmoothingSettings"
+            }
+          ],
+          "default": {
+            "alpha": null,
+            "metric": "aic"
+          },
+          "ecoscope:advanced": true,
+          "title": "Smoothing"
+        },
+        "spline_settings": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/GamSplineSettings"
+            }
+          ],
+          "default": {
+            "degree_of_freedom": 6,
+            "degree": 3
+          },
+          "ecoscope:advanced": true,
+          "title": "Spline Shape"
+        }
+      },
+      "title": "Generalized Additive Model (GAM)",
+      "type": "object"
+    },
+    "GammFamilySettings": {
+      "properties": {
+        "family": {
+          "default": "gaussian",
+          "description": "Distribution assumed for the response variable.",
+          "ecoscope:advanced": true,
+          "oneOf": [
+            {
+              "const": "gaussian",
+              "title": "Gaussian"
+            },
+            {
+              "const": "poisson",
+              "title": "Poisson"
+            },
+            {
+              "const": "gamma",
+              "title": "Gamma"
+            },
+            {
+              "const": "bernoulli",
+              "title": "Bernoulli"
+            }
+          ],
+          "title": "Distribution Family",
+          "type": "string"
+        }
+      },
+      "title": "GammFamilySettings",
+      "type": "object"
+    },
+    "GammMcmcSettings": {
+      "properties": {
+        "inference_method": {
+          "default": "mcmc",
+          "description": "MCMC is the reliable default for models with random effects; Laplace is faster when it converges but may fail for some model specifications.",
+          "ecoscope:advanced": true,
+          "oneOf": [
+            {
+              "const": "mcmc",
+              "title": "MCMC"
+            },
+            {
+              "const": "laplace",
+              "title": "Laplace"
+            }
+          ],
+          "title": "Inference Method",
+          "type": "string"
+        },
+        "draws": {
+          "default": 500,
+          "description": "Number of posterior samples to draw per chain.",
+          "ecoscope:advanced": true,
+          "title": "Posterior Draws",
+          "type": "integer"
+        },
+        "tune": {
+          "default": null,
+          "description": "Number of MCMC tuning steps. Leave empty to default to the same value as Posterior Draws.",
+          "ecoscope:advanced": true,
+          "title": "MCMC Tuning Steps",
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "chains": {
+          "default": 2,
+          "description": "Number of independent MCMC chains to run.",
+          "ecoscope:advanced": true,
+          "title": "MCMC Chains",
+          "type": "integer"
+        },
+        "random_seed": {
+          "default": null,
+          "description": "Seed for the MCMC sampler. Leave empty for a non-deterministic fit.",
+          "ecoscope:advanced": true,
+          "title": "Random Seed",
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "title": "GammMcmcSettings",
+      "type": "object"
+    },
+    "GammSplineSettings": {
+      "properties": {
+        "degree_of_freedom": {
+          "default": 10,
+          "description": "Number of basis functions for the spline. Higher values allow more flexible curves but risk overfitting.",
+          "ecoscope:advanced": true,
+          "title": "Spline Degrees of Freedom",
+          "type": "integer"
+        }
+      },
+      "title": "GammSplineSettings",
+      "type": "object"
+    },
+    "GammTrendModel": {
+      "description": "Bayesian generalized additive mixed model with per-site random\neffects. A workflow fits this once across every site's combined data\n(site_ids derived automatically from a \"name\" column if present - see\nfit_trend_model), then predicts each site's own group-specific curve\nfrom that shared fit (see predict_trend_model's `dataframe` parameter) -\nunlike the other three models, which each fit and predict independently\nper site. Mainly useful here for its Bayesian credible intervals rather\nthan frequentist confidence intervals, at the added cost of MCMC\nsampling - both fitting and (since a fitted estimator can't cross a task\nboundary) every downstream prediction refit this model from scratch,\nmaking it substantially slower than the other three.",
+      "properties": {
+        "model": {
+          "const": "gamm",
+          "default": "gamm",
+          "enum": [
+            "gamm"
+          ],
+          "title": "Model",
+          "type": "string"
+        },
+        "family_settings": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/GammFamilySettings"
+            }
+          ],
+          "default": {
+            "family": "gaussian"
+          },
+          "ecoscope:advanced": true,
+          "title": "Distribution Family"
+        },
+        "spline_settings": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/GammSplineSettings"
+            }
+          ],
+          "default": {
+            "degree_of_freedom": 10
+          },
+          "ecoscope:advanced": true,
+          "title": "Spline Shape"
+        },
+        "mcmc_settings": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/GammMcmcSettings"
+            }
+          ],
+          "default": {
+            "inference_method": "mcmc",
+            "draws": 500,
+            "tune": null,
+            "chains": 2,
+            "random_seed": null
+          },
+          "ecoscope:advanced": true,
+          "title": "MCMC Sampling"
+        }
+      },
+      "title": "Generalized Additive Mixed Model (GAMM)",
+      "type": "object"
+    },
+    "GlmFamilySettings": {
+      "properties": {
+        "family": {
+          "default": "gaussian",
+          "description": "Distribution assumed for the response variable.",
+          "ecoscope:advanced": true,
+          "oneOf": [
+            {
+              "const": "gaussian",
+              "title": "Gaussian"
+            },
+            {
+              "const": "poisson",
+              "title": "Poisson"
+            },
+            {
+              "const": "binomial",
+              "title": "Binomial"
+            },
+            {
+              "const": "gamma",
+              "title": "Gamma"
+            }
+          ],
+          "title": "Distribution Family",
+          "type": "string"
+        }
+      },
+      "title": "GlmFamilySettings",
+      "type": "object"
+    },
+    "GlmTrendModel": {
+      "description": "Generalized linear model. Baseline for comparison against the smoothed\nmodels below - not recommended as the final trend line.",
+      "properties": {
+        "model": {
+          "const": "glm",
+          "default": "glm",
+          "enum": [
+            "glm"
+          ],
+          "title": "Model",
+          "type": "string"
+        },
+        "family_settings": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/GlmFamilySettings"
+            }
+          ],
+          "default": {
+            "family": "gaussian"
+          },
+          "ecoscope:advanced": true,
+          "title": "Distribution Family"
+        },
+        "intercept_settings": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/AddInterceptSettings"
+            }
+          ],
+          "default": {
+            "add_intercept": true
+          },
+          "ecoscope:advanced": true,
+          "title": "Add Intercept"
+        }
+      },
+      "title": "Generalized Linear Model (GLM)",
+      "type": "object"
+    },
+    "LinearTrendModel": {
+      "description": "Ordinary least squares. No smoothing - a single straight-line trend.",
+      "properties": {
+        "model": {
+          "const": "linear",
+          "default": "linear",
+          "enum": [
+            "linear"
+          ],
+          "title": "Model",
+          "type": "string"
+        },
+        "intercept_settings": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/AddInterceptSettings"
+            }
+          ],
+          "default": {
+            "add_intercept": true
+          },
+          "ecoscope:advanced": true,
+          "title": "Add Intercept"
+        }
+      },
+      "title": "Linear Regression",
       "type": "object"
     }
   },
@@ -711,16 +1123,6 @@
         ]
       }
     },
-    "Trend Analysis": {
-      "gamm_model": {
-        "ui:order": [
-          "metric",
-          "degree_of_freedom",
-          "degree",
-          "family"
-        ]
-      }
-    },
     "Dashboard": {
       "ui:order": [
         "map_widget_title",
@@ -736,9 +1138,116 @@
       "roi",
       "Forest Analysis",
       "base_map_defs",
+      "roi_layer",
       "Trend Analysis",
       "Dashboard"
-    ]
+    ],
+    "roi": {
+      "config": {
+        "anyOf": [
+          {
+            "name_column": {
+              "ui:widget": "hidden"
+            }
+          },
+          {
+            "name_column": {
+              "ui:widget": "hidden"
+            }
+          }
+        ]
+      }
+    },
+    "Trend Analysis": {
+      "trend_model": {
+        "model": {
+          "anyOf": [
+            {
+              "ui:options": {
+                "label": false
+              },
+              "model": {
+                "ui:widget": "hidden"
+              },
+              "intercept_settings": {
+                "ui:options": {
+                  "label": false
+                }
+              }
+            },
+            {
+              "ui:options": {
+                "label": false
+              },
+              "model": {
+                "ui:widget": "hidden"
+              },
+              "family_settings": {
+                "ui:options": {
+                  "label": false
+                }
+              },
+              "intercept_settings": {
+                "ui:options": {
+                  "label": false
+                }
+              }
+            },
+            {
+              "ui:options": {
+                "label": false
+              },
+              "model": {
+                "ui:widget": "hidden"
+              },
+              "family_settings": {
+                "ui:options": {
+                  "label": false
+                }
+              },
+              "smoothing_settings": {
+                "ui:options": {
+                  "label": false
+                }
+              },
+              "spline_settings": {
+                "ui:options": {
+                  "label": false
+                }
+              },
+              "bounds_settings": {
+                "ui:options": {
+                  "label": false
+                }
+              }
+            },
+            {
+              "ui:options": {
+                "label": false
+              },
+              "model": {
+                "ui:widget": "hidden"
+              },
+              "family_settings": {
+                "ui:options": {
+                  "label": false
+                }
+              },
+              "spline_settings": {
+                "ui:options": {
+                  "label": false
+                }
+              },
+              "mcmc_settings": {
+                "ui:options": {
+                  "label": false
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
   },
   "additionalProperties": false
 }

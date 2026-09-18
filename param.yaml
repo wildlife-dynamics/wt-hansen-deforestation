@@ -1,0 +1,27 @@
+workflow_details:
+  name: "Hansen Deforestation"
+  description: "Forest cover trend analysis using the Hansen Global Forest Change dataset."
+gee_project_name:
+  data_source:
+    name: ecoscope_poc
+hansen_image:
+  var: "UMD/hansen/global_forest_change_2024_v1_12"
+time_range:
+  since: "2015-01-01T00:00:00.000Z"
+  until: "2023-12-31T23:59:59.000Z"
+roi:
+  config:
+    file_path: "../sample_data/all_regions_roi.parquet"
+    name_column: "name"
+groupers:
+  groupers:
+    - index_name: "name"
+tree_cover_threshold:
+  var: 60.0
+trend_model:
+  model:
+    model: "gamm"
+map_widget_title:
+  var: "Forest Change Map"
+chart_widget_title:
+  var: "Forest Cover Trend Chart"

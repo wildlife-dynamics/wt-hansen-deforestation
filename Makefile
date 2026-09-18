@@ -10,13 +10,6 @@ WORKFLOW_ID   := hansen-deforestation
 WORKFLOW_DIR  := ecoscope-workflows-$(WORKFLOW_ID)-workflow
 OUTPUT_DIR    := /tmp/wt-hansen-deforestation/output
 
-# DEV ONLY: shadows the published ecoscope-platform conda dependency (see
-# spec.yaml requirements) with this unpublished local checkout, so
-# compile-time task discovery and runtime execution both pick up
-# trend-analysis multi-model work that isn't released yet. Drop once a
-# released ecoscope-platform version contains it.
-ECOSCOPE_LOCAL_PATH := /Users/zak/Documents/w-dynamics/ecoscope
-
 # ------------------------------------------------------------------------------
 # AESTHETICS & THEME
 # ------------------------------------------------------------------------------
@@ -68,7 +61,7 @@ all: compile run ## Compile then run
 
 compile: ## Compile spec.yaml into the workflow package
 	$(call print_head,⚙,Compiling Hansen Deforestation,$(VIOLET))
-	@PYTHONPATH="$(ECOSCOPE_LOCAL_PATH)" ./dev/recompile.sh --install
+	@./dev/recompile.sh --install
 
 setup: ## Create output directory
 	$(call print_head,⚙,Setting up Environment,$(VIOLET))
@@ -88,7 +81,6 @@ run: setup ## Run the workflow headlessly with param.yaml
 	$(call print_head,🚀,Execution Log,$(PEACH))
 
 	@cd $(WORKFLOW_DIR) && \
-	PYTHONPATH="$(ECOSCOPE_LOCAL_PATH)" \
 	ECOSCOPE_WORKFLOWS_RESULTS="file://$(OUTPUT_DIR)" \
 	pixi run ecoscope-workflows-$(WORKFLOW_ID)-workflow run \
 		--config-file ../param.yaml \
@@ -123,7 +115,6 @@ serve: setup ## Start the runner server (API only — no bundled UI)
 	# NOTE: The Ecoscope platform provides the React frontend that consumes these endpoints.
 	# To preview the rjsf form schema, paste the /rjsf response into https://rjsf.io
 	@cd $(WORKFLOW_DIR) && \
-	PYTHONPATH="$(ECOSCOPE_LOCAL_PATH)" \
 	pixi run -e runner uvicorn ecoscope_workflows_runner.app:app --host 0.0.0.0 --port 8080 --reload
 
 clean: ## Delete output directory

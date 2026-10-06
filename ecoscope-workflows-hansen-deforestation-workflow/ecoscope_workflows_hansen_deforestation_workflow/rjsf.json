@@ -416,7 +416,7 @@
                   "family": "gaussian"
                 },
                 "spline_settings": {
-                  "degree_of_freedom": 10
+                  "degree_of_freedom": 5
                 },
                 "mcmc_settings": {
                   "inference_method": "mcmc",

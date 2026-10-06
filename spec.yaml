@@ -106,12 +106,23 @@ rjsf-overrides:
     # GAMM by default - its combined-fit random effect gives every region a
     # more robust estimate than fitting each in isolation (see the module
     # docstring in ecoscope.platform.tasks.analysis._trend_analysis).
+    #
+    # degree_of_freedom lowered from 10 to 5 after testing against real
+    # Earth Engine data (6 regions x 9 years, 2015-2023): at 10, the shared
+    # spline is overparameterized for data this size - posterior SD on some
+    # spline coefficients exceeded 20, and one region's predicted curve went
+    # physically negative. A sweep over degree_of_freedom 3-10 on that same
+    # real data showed r_squared is flat (0.037-0.043) across the whole
+    # range - the combined fit's low r_squared is inherent to pooling via a
+    # single random intercept, not spline flexibility - while max spline
+    # coefficient SD only blows up at 8+ (0.73 at 8, 21.08 at 10) and stays
+    # well-behaved (<=0.30) at 3-6. 5 matches the per-region GAM default.
     Trend Analysis.properties.trend_model.properties.model.default:
       model: "gamm"
       family_settings:
         family: "gaussian"
       spline_settings:
-        degree_of_freedom: 10
+        degree_of_freedom: 5
       mcmc_settings:
         inference_method: "mcmc"
         draws: 500

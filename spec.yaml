@@ -1,12 +1,38 @@
 id: hansen_deforestation
 
 requirements:
+  # 2.25.3 is the first published version with the GLM-drop/GAM-Bayesian
+  # work (ecoscope#848) - no more PYTHONPATH shadow needed.
   - name: ecoscope-platform
-    version: ">=2.25.0,<3.0.0"
+    version: ">=2.25.3,<3.0.0"
     channel: https://repo.prefix.dev/ecoscope-workflows/
 
   - name: pydeck
     version: "0.9.2"
+    channel: conda-forge
+
+  # Without these, conda can resolve an old arviz/arviz-plots pair
+  # (0.23.4/0.8.0 as observed) that's incompatible with the matplotlib
+  # version also resolved here (arviz_plots.__init__ calls the private
+  # matplotlib.style.core API, removed in newer matplotlib) - breaks GAM/
+  # GAMM on `import bambi`/`import arviz` with AttributeError: module
+  # 'matplotlib.style' has no attribute 'core'. Pinning arviz alone then
+  # breaks the old bambi/pymc conda resolves too (they still call
+  # arviz.concat, removed in arviz>=1.0) - so bambi/pymc need bumping in
+  # step with arviz. Re-added here after being removed (commit 99f97da) as
+  # "now-redundant" - that verification wasn't durable: `pixi update`
+  # re-resolved the old incompatible pair again on a later recompile.
+  - name: arviz
+    version: ">=1.0.0"
+    channel: conda-forge
+  - name: arviz-plots
+    version: ">=1.0.0"
+    channel: conda-forge
+  - name: bambi
+    version: ">=0.20.0"
+    channel: conda-forge
+  - name: pymc
+    version: ">=6.0.0"
     channel: conda-forge
 
 rjsf-overrides:
@@ -68,12 +94,23 @@ rjsf-overrides:
     # GAMM by default - its combined-fit random effect gives every region a
     # more robust estimate than fitting each in isolation (see the module
     # docstring in ecoscope.platform.tasks.analysis._trend_analysis).
+    #
+    # degree_of_freedom lowered from 10 to 5 after testing against real
+    # Earth Engine data (6 regions x 9 years, 2015-2023): at 10, the shared
+    # spline is overparameterized for data this size - posterior SD on some
+    # spline coefficients exceeded 20, and one region's predicted curve went
+    # physically negative. A sweep over degree_of_freedom 3-10 on that same
+    # real data showed r_squared is flat (0.037-0.043) across the whole
+    # range - the combined fit's low r_squared is inherent to pooling via a
+    # single random intercept, not spline flexibility - while max spline
+    # coefficient SD only blows up at 8+ (0.73 at 8, 21.08 at 10) and stays
+    # well-behaved (<=0.30) at 3-6. 5 matches the per-region GAM default.
     Trend Analysis.properties.trend_model.properties.model.default:
       model: "gamm"
       family_settings:
         family: "gaussian"
       spline_settings:
-        degree_of_freedom: 10
+        degree_of_freedom: 5
       mcmc_settings:
         inference_method: "mcmc"
         draws: 500
@@ -99,7 +136,10 @@ rjsf-overrides:
     # non-editable value that just repeats the dropdown selection, carrying
     # no real choice to preserve - matches home-range's own treatment of the
     # analogous auto_scale_or_custom const field). Positional, matching
-    # TrendModel's union order: LinearTrendModel, GlmTrendModel, GamTrendModel, GammTrendModel.
+    # TrendModel's union order: LinearTrendModel, GamTrendModel, GammTrendModel.
+    # GAM and GAMM now have identical field shapes (GAM lost GLM's old
+    # smoothing_settings/bounds_settings when it moved to PyMC/Bambi, same
+    # machinery as GAMM minus the per-site random effect).
     Trend Analysis.trend_model.model.anyOf:
       - ui:options:
           label: false
@@ -115,23 +155,10 @@ rjsf-overrides:
         family_settings:
           ui:options:
             label: false
-        intercept_settings:
-          ui:options:
-            label: false
-      - ui:options:
-          label: false
-        model:
-          ui:widget: hidden
-        family_settings:
-          ui:options:
-            label: false
-        smoothing_settings:
-          ui:options:
-            label: false
         spline_settings:
           ui:options:
             label: false
-        bounds_settings:
+        mcmc_settings:
           ui:options:
             label: false
       - ui:options:
@@ -315,7 +342,7 @@ workflow:
 
       # GAMM fits once across every region's combined data (a real random
       # effect needs multiple sites in one fit; see GammTrendModel's own
-      # docstring), unlike the other 3 models which each fit independently
+      # docstring), unlike Linear and GAM which each fit independently
       # per region - so it gets its own combined-fit branch below, gated by
       # is_gamm_trend_model/is_not_gamm_trend_model so exactly one of the
       # two fit branches actually runs for any given model selection. Both

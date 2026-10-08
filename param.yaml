@@ -21,6 +21,8 @@ tree_cover_threshold:
 trend_model:
   model:
     model: "gamm"
+    spline_settings:
+      degree_of_freedom: 5
 map_widget_title:
   var: "Forest Change Map"
 chart_widget_title:

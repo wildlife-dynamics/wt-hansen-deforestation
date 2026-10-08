@@ -336,6 +336,7 @@ def main(params: dict[str, Any], validate_params_schema: bool = True):
                     {"label": "ROI Boundary", "color": "rgba(127, 201, 127, 1)"}
                 ],
             },
+            tooltip_columns=None,
             **(params.get("roi_layer") or {}),
         )
         .mapvalues(argnames=["geodataframe"], argvalues=split_roi_groups)

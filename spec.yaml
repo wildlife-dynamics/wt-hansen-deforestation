@@ -294,6 +294,7 @@ workflow:
         values:
           - label: ROI Boundary
             color: rgba(127, 201, 127, 1)
+      tooltip_columns: null
     mapvalues:
       argnames: geodataframe
       argvalues: ${{ workflow.split_roi_groups.return }}

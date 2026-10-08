@@ -372,24 +372,6 @@
       "required": [],
       "title": "Base Maps"
     },
-    "roi_layer": {
-      "additionalProperties": false,
-      "properties": {
-        "tooltip_columns": {
-          "default": null,
-          "items": {
-            "type": "string"
-          },
-          "title": "Tooltip Columns",
-          "type": "array",
-          "description": "Restrict the on-hover tooltip to these column names. None (default) shows all properties.",
-          "ecoscope:advanced": true
-        }
-      },
-      "type": "object",
-      "required": [],
-      "title": ""
-    },
     "Trend Analysis": {
       "type": "object",
       "description": "Choose a trend model and configure its fitting parameters.",
@@ -976,7 +958,6 @@
       "roi",
       "Forest Analysis",
       "base_map_defs",
-      "roi_layer",
       "Trend Analysis",
       "Dashboard"
     ],
